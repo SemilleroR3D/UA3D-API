@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import { jwtTokent } from '../config/server' // Asegúrate de que 'jwtTokent' esté correctamente importado desde tu configuración
-
+import { jwtTokent } from '../config/server'
 /**
  * @swagger
  * tags:

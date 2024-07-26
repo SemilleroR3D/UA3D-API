@@ -3,13 +3,12 @@ import { Strategy as AzureAdOAuth2Strategy } from 'passport-azure-ad-oauth2'
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import { azure, jwtTokent } from '../config/server'
-import { createOrUpdateUser } from '../services/userService'
+import { findOrCreateUser } from '../services/userService'
 
 interface User {
   id: string
   mail: string
   photo?: string
-  // Añade otros campos según sea necesario
 }
 
 passport.use(new AzureAdOAuth2Strategy({
@@ -38,7 +37,7 @@ passport.use(new AzureAdOAuth2Strategy({
       user.photo = `data:image/jpeg;base64,${Buffer.from(photoResponse.data).toString('base64')}`
 
       if (typeof user.mail === 'string' && user.mail.endsWith('@udla.edu.co')) {
-        const savedUser = await createOrUpdateUser(user)
+        const savedUser = await findOrCreateUser(user.id, user.mail, user.photo)
 
         // Firmar un token JWT
         const token = jwt.sign({ id: savedUser.id }, jwtTokent, { expiresIn: '1h' })
